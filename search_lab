@@ -1,0 +1,38 @@
+#!/bin/bash
+clear
+loop=y
+while [ "$loop" = "y" ] || [ "$loop" = "Y" ]
+do
+clear
+equipment=equipment.txt
+echo  "                $(tput smul)Search Lab Equipment Form"$(tput sgr0) 
+read -p "Search Stock Code : " stockCode
+stock="^S[0-9]{5}$"
+ while [[ ! $stockCode =~ $stock ]]; 
+ do
+  echo "Invalid Stock Code."; read -p "Search Stock Code :" stockCode
+ done
+echo "__________________________________________________________________________"
+echo 
+echo
+
+grep "$stockCode" "$equipment" | awk -F ":" '{
+	  print "Manufacturer     :", $2,"\n";
+	  print "Model            :", $3,"\n";
+	  print "Item Description :", $4,"\n";
+	  print "Serial Number    :", $5,"\n";
+	  print "Status           :", $6,"\n";
+     }' 
+
+ 
+echo -n  "Search Another Equipment? (y)es or (q)uit :"
+echo 
+echo "Press (q) to return to" $(tput bold)"Lab Equipment"$(tput sgr0) " Management Menu."
+read choice
+ if [ "$choice" = "q" ]
+ then 
+  ./main_menu
+  break
+ fi
+
+done

@@ -1,0 +1,27 @@
+#!/bin/bash
+clear
+loop=y
+while [ "$loop" = "y" ] || [ "$loop" = "Y" ]
+do
+student=student.txt
+echo  "                $(tput smul)Search Student Form"$(tput sgr0) 
+read -p "Search Student Form :" studid
+echo "_______________________________________________________________________"
+echo -n
+
+grep "$studid" "$student" | awk -F ":" '{
+	  print "Full Name     :", $2,"\n";
+	  print "Contact Number:", $3,"\n";
+	  print "Email Address :", $4,"\n";
+     }' 
+echo -n  "Search Another Student? (y)es or (q)uit :"
+echo 
+echo "Press (q) to return to" $(tput bold)"Lab Equipment"$(tput sgr0) " Management Menu."
+read choice
+ if [ "$choice" = "q" ]
+ then 
+  ./main_menu
+  break
+ fi
+
+done

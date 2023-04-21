@@ -1,0 +1,44 @@
+
+ch=0
+while [ -n $ch ]
+do
+clear
+
+echo "Lab Equipment Management Menu"
+echo "__________________________________________________________"
+echo 
+echo "A - Register New Student"
+echo "S - Search Student Details"
+echo "C - Add New Lab Equipment"
+echo "D - Search Lab Equipment"
+echo "E - Loan Lab Equipment"
+echo " "
+echo "Q - Exit From Program"
+echo " "
+echo "Please select a choice: "
+read ch
+
+case "$ch" in
+A|a) ./register_stud;;
+S|s) ./search_stud;;
+C|c) ./add_lab;;
+D|d) ./search_lab;;
+E|e) ./loan_lab;;
+Q|q) 
+echo "Are you sure want to quit? Type "q" button to quit."
+read quit
+if [ "$quit" == "q" ] || [ "$quit" == "Q" ]
+ then
+  echo "Exiting in 3"
+  sleep 1
+  echo "Exiting in 2"
+  sleep 1
+  echo "Exiting in 1"
+  sleep 1
+  exit 
+ fi
+;;
+*) echo "Invalid choice!!! Please try again.";;
+
+esac
+done

@@ -1,0 +1,101 @@
+#!/bin/bash
+clear
+student=student.txt
+equipment=equipment.txt
+count=0
+echo "             Student Details Validation Form"
+echo "_______________________________________________________"
+echo
+read -p "Please enter the Student's ID Number: " studid
+echo
+
+grep "$studid" "$student" | awk -F ":" '{
+	  print "Student Name:", $2,"\n";
+     }' 
+     
+stud="$(grep "$studid" "$student" | awk -F ":" '{
+	  print $2;
+     }')"
+     
+echo
+echo "Press (n) to procced" $(tput bold)"Loan Equipment" $(tput sgr0) "or (q) to return to " $(tput bold)"Lab Equipment Management Menu" $(tput sgr0) ":"
+read choice
+ if [ "$choice" = "q" ] || [ "$choice" = "Q" ]
+ then 
+  ./main_menu
+  break
+ elif [ "$choice" = "n" ] || [ "$loop" = "N" ]
+ then
+ 
+loop=y
+while [ "$loop" = "y" ] || [ "$loop" = "Y" ]
+do
+clear
+
+echo "                 Loan Lab Equipment Form"
+echo "_______________________________________________________"
+echo 
+read -p "Please enter the stock code: " stock
+echo
+grep "$stock" "$equipment" | awk -F ":" '{
+	  print "Serial Number    :", $5,"\n";
+	  print "Model            :", $3,"\n";
+	  print "Description      :", $4,"\n";
+     }'
+toLoanModel="$(grep "$stock" "$equipment" | awk -F ":" '{
+	  print $3;
+     }')"
+toLoanDesc="$(grep "$stock" "$equipment" | awk -F ":" '{
+	  print $4;
+     }')"
+echo "______________________________________________________________________________"
+echo 
+echo "Please enter the following details upon the loan of the lab equipment."
+echo
+
+read -p "Stock status             : " status
+read -p "Loan Date (mm-dd-yyyy)   : " loandate
+
+read -p "Reason to Loan           : " reason
+echo
+count=`expr $count + 1`
+
+
+echo "$studid:$stud:$loandate" > $studid
+
+echo "$count:$studid:$reason:$toLoanModel:$toLoanDesc" >> $loandate
+
+
+echo "Press (y) to continue to" $(tput bold)"Loan Lab Equipment" $(tput sgr0) "or (c) to generate" $(tput bold)"Lab Equipment Loan Receipt" $(tput sgr0) "."
+read choose
+
+ if [ "$choose" = "c" ] || [ "$choose" = "C" ]
+ then 
+   echo "Generating new lab equipment loan receipt..."
+   sleep 2
+  echo "                     Equipment Loan Receipt"  >> $studid\_$loandate
+  grep "$studid" "$studid" | awk -F ":" '{
+	  print "Student ID       :", $1,"\n";
+	  print "Student Name     :", $2,"\n";
+	  print "Loan Date        :", $3,"\n";
+     }' >> $studid\_$loandate
+     
+  echo "=================================================================" >> $studid\_$loandate
+   
+  grep "$studid" $loandate | awk -F ":" '{
+          print "No.            :"$1;
+	  print "Model          :"$4;
+	  print "Description    :"$5;
+	  print "Reason to Loan :"$3,"\n";
+     }' >> $studid\_$loandate
+     
+   awk 'END{print "Total loan items: ",NR}' $loandate >> $studid\_$loandate
+   
+   
+   
+  break
+  
+ fi
+done
+
+ fi
